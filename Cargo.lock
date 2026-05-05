@@ -866,6 +866,7 @@ dependencies = [
 [[package]]
 name = "const-field-offset"
 version = "0.2.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "const-field-offset-macro",
  "field-offset",
@@ -874,6 +875,7 @@ dependencies = [
 [[package]]
 name = "const-field-offset-macro"
 version = "0.2.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2120,6 +2122,7 @@ checksum = "48ce8546b993eaf241d69ded33b1be6d205dd9857ec879d9d18bd05d3676e144"
 [[package]]
 name = "i-slint-backend-android-activity"
 version = "1.16.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "android-build",
  "i-slint-core",
@@ -2131,6 +2134,7 @@ dependencies = [
 [[package]]
 name = "i-slint-backend-linuxkms"
 version = "1.16.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "bytemuck",
  "calloop 0.14.3",
@@ -2152,6 +2156,7 @@ dependencies = [
 [[package]]
 name = "i-slint-backend-selector"
 version = "1.16.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "cfg-if",
  "i-slint-backend-linuxkms",
@@ -2166,6 +2171,7 @@ dependencies = [
 [[package]]
 name = "i-slint-backend-testing"
 version = "1.16.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "i-slint-common",
  "i-slint-core",
@@ -2175,6 +2181,7 @@ dependencies = [
 [[package]]
 name = "i-slint-backend-winit"
 version = "1.16.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "accesskit",
  "accesskit_winit",
@@ -2220,6 +2227,7 @@ dependencies = [
 [[package]]
 name = "i-slint-common"
 version = "1.16.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "derive_more",
  "fontique",
@@ -2231,6 +2239,7 @@ dependencies = [
 [[package]]
 name = "i-slint-compiler"
 version = "1.16.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "annotate-snippets",
  "by_address",
@@ -2262,6 +2271,7 @@ dependencies = [
 [[package]]
 name = "i-slint-core"
 version = "1.16.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "auto_enums",
  "bitflags 2.10.0",
@@ -2310,6 +2320,7 @@ dependencies = [
 [[package]]
 name = "i-slint-core-macros"
 version = "1.16.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "quote",
  "serde_json",
@@ -2319,6 +2330,7 @@ dependencies = [
 [[package]]
 name = "i-slint-renderer-femtovg"
 version = "1.16.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "cfg-if",
  "const-field-offset",
@@ -2340,6 +2352,7 @@ dependencies = [
 [[package]]
 name = "i-slint-renderer-skia"
 version = "1.16.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "ash",
  "bytemuck",
@@ -2381,6 +2394,7 @@ dependencies = [
 [[package]]
 name = "i-slint-renderer-software"
 version = "1.16.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "bytemuck",
  "clru",
@@ -4988,6 +5002,7 @@ checksum = "7a2ae44ef20feb57a68b23d846850f861394c2e02dc425a50098ae8c90267589"
 [[package]]
 name = "slint"
 version = "1.16.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "const-field-offset",
  "i-slint-backend-android-activity",
@@ -5009,6 +5024,7 @@ dependencies = [
 [[package]]
 name = "slint-build"
 version = "1.16.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "derive_more",
  "fontique",
@@ -5020,6 +5036,7 @@ dependencies = [
 [[package]]
 name = "slint-macros"
 version = "1.16.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "i-slint-compiler",
  "proc-macro2",
@@ -6106,6 +6123,7 @@ checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
 [[package]]
 name = "vtable"
 version = "0.4.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "const-field-offset",
  "portable-atomic",
@@ -6116,6 +6134,7 @@ dependencies = [
 [[package]]
 name = "vtable-macro"
 version = "0.4.0"
+source = "git+https://github.com/taichi765/slint#facc6b30bbe66c573f701ab274851805bc493f83"
 dependencies = [
  "proc-macro2",
  "quote",
