@@ -20,6 +20,7 @@ pub struct EffectEditorModel {
 
 impl EffectEditorModel {
     pub fn new(doc: Arc<Mutex<Doc>>, id_state: Observable<Option<AnyEffectId>>) -> Rc<Self> {
+        let doc_view = doc.lock().unwrap().state_view();
         let me = Rc::new(Self {
             opening_tabs: Rc::new(VecModel::from(Vec::new())),
             current_effect_data: Observable::new(None),
@@ -27,13 +28,11 @@ impl EffectEditorModel {
 
         doc.lock().unwrap().subscribe({
             let me = Rc::clone(&me);
-            let doc = Arc::clone(&doc);
             let id_state = id_state.clone();
 
             Box::new(move |ev| match ev {
                 DocEffect::EffectUpdated(id) => {
-                    let new_data =
-                        EffectEditorData::from_effect(*id, doc.lock().unwrap().state_view());
+                    let new_data = EffectEditorData::from_effect(*id, doc_view.clone());
 
                     me.current_effect_data.set(Some(new_data));
                 }

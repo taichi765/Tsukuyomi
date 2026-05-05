@@ -1,11 +1,15 @@
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 
 use slint::{ComponentHandle, Global};
-use tracing::trace;
-use tsukuyomidmx_core::effects::{EffectChange, FixtureQuery, SimpleEffectBody};
+use tracing::{instrument, trace};
+use tsukuyomidmx_core::{
+    doc::Doc,
+    effects::{EffectChange, FixtureQuery, SimpleEffectBody},
+};
 
 use crate::{
-    app::App,
+    Observable,
+    app::{AnyEffectId, App},
     models::{EffectEditorData, EffectEditorModel},
     ui,
 };
@@ -15,37 +19,10 @@ pub(super) fn setup(app: &App, effect_model: &EffectEditorModel) {
 
     adopter.on_update_value({
         let doc = Arc::clone(&app.doc);
-        let doc_view = doc.lock().unwrap().state_view();
         let cur_id_state = app.global_store.read().unwrap().current_effect_id();
 
         move |offset, value| {
-            let offset: usize = offset.try_into().unwrap();
-            let cur_id = cur_id_state.get().unwrap().unwrap_effect();
-
-            let new_body = doc_view.with_effects(|it| {
-                let fx_body = it.get(&cur_id).unwrap().unwrap_simple();
-                let SimpleEffectBody::New { fixtures, values } = fx_body else {
-                    unreachable!("this effect is always SimpleEffectBody::New");
-                };
-                let new_values = values
-                    .iter()
-                    .map(|(&old_offset, &old_val)| {
-                        if old_offset == offset {
-                            (offset, value.try_into().unwrap())
-                        } else {
-                            (old_offset, old_val)
-                        }
-                    })
-                    .collect();
-                SimpleEffectBody::New {
-                    fixtures: fixtures.clone(),
-                    values: new_values,
-                }
-            });
-            doc.lock()
-                .unwrap()
-                .update_effect(cur_id, EffectChange::Simple(new_body))
-                .unwrap();
+            update_value(&doc, &cur_id_state, offset, value);
         }
     });
 
@@ -63,4 +40,41 @@ pub(super) fn setup(app: &App, effect_model: &EffectEditorModel) {
             }
         }
     });
+}
+
+#[instrument]
+fn update_value(
+    doc: &Arc<Mutex<Doc>>,
+    cur_id_state: &Observable<Option<AnyEffectId>>,
+    offset: i32,
+    value: i32,
+) {
+    let doc_view = doc.lock().unwrap().state_view();
+    let offset: usize = offset.try_into().unwrap();
+    let cur_id = cur_id_state.get().unwrap().unwrap_effect();
+
+    let new_body = doc_view.with_effects(|it| {
+        let fx_body = it.get(&cur_id).unwrap().unwrap_simple();
+        let SimpleEffectBody::New { fixtures, values } = fx_body else {
+            unreachable!("this effect is always SimpleEffectBody::New");
+        };
+        let new_values = values
+            .iter()
+            .map(|(&old_offset, &old_val)| {
+                if old_offset == offset {
+                    (offset, value.try_into().unwrap())
+                } else {
+                    (old_offset, old_val)
+                }
+            })
+            .collect();
+        SimpleEffectBody::New {
+            fixtures: fixtures.clone(),
+            values: new_values,
+        }
+    });
+    doc.lock()
+        .unwrap()
+        .update_effect(cur_id, EffectChange::Simple(new_body))
+        .unwrap();
 }

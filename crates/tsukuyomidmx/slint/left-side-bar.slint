@@ -67,6 +67,8 @@ export component LeftSideBar inherits Rectangle {
             is-selected: current-index == 1;
             tooltip: @tr("Functions");
             clicked => {
+                // FIXME: ダブルクリックしないとclick判定にならない、おそらくmain threadがblockされている
+                debug("switching tab");
                 current-index = current-index == 1 ? -1 : 1;
             }
             show-tooltip(has-hover, x, y, msg) => root.show-tooltip(has-hover, x, y, msg);
