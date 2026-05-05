@@ -130,7 +130,7 @@ impl Engine {
                     let univ = plugin.universe();
                     let (tx, rx) = watch::channel(PluginMessage::DmxFrame(DmxFrame::zeros()));
                     let handle =
-                        task::spawn(async move { plugin.start(rx).await.expect("plugin exited") });
+                        task::spawn(async move { plugin.start(rx).await.expect("plugin exited") }); // TODO: pluginのパニックに巻き込まれないようにしたい
                     self.plugins.push((univ, tx));
                     self.plugin_handles.push(handle);
                 }

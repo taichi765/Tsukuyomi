@@ -128,14 +128,17 @@ impl EffectEditorData {
             let effect = it.get(&effect_id).unwrap();
             match effect.body() {
                 EffectBody::Simple(body) => match body {
-                    SimpleEffectBody::New { fixtures, values } => {
-                        let channels = doc.with_fixtures_and_defs(|fxts, defs| {
+                    SimpleEffectBody::New {
+                        fixtures,
+                        values: _,
+                    } => {
+                        let channels = doc.with_fixtures_and_defs(|_fxts, _defs| {
                             vec![ui::SimpleEffectSingleViewChannelData {
                                 enabled: true,
                                 kind: ui::ChannelKind::Dimmer,
                                 name: "Dimmer".to_shared_string(),
                                 offset: 0,
-                                value: 255, // TODO
+                                value: 255, // TODO!: dummy
                             }]
                         });
                         EffectEditorData::Simple(SimpleEffectSingleViewAdopterData {

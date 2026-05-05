@@ -119,12 +119,12 @@ impl EffectTreeViewModel {
                     me_clone.data.borrow_mut().remove(&AnyEffectId::Effect(*id));
                     me_clone.notify.row_removed(pos, 1);
                 }
-                DocEffect::EffectSpecAdded(id) => todo!(),
-                DocEffect::EffectSpecUpdated(id) => todo!(),
-                DocEffect::EffectSpecRemoved(id) => todo!(),
-                DocEffect::EffectTemplateAdded(id) => todo!(),
-                DocEffect::EffectTemplateUpdated(id) => todo!(),
-                DocEffect::EffectTemplateRemoved(id) => todo!(),
+                DocEffect::EffectSpecAdded(_id) => todo!(),
+                DocEffect::EffectSpecUpdated(_id) => todo!(),
+                DocEffect::EffectSpecRemoved(_id) => todo!(),
+                DocEffect::EffectTemplateAdded(_id) => todo!(),
+                DocEffect::EffectTemplateUpdated(_id) => todo!(),
+                DocEffect::EffectTemplateRemoved(_id) => todo!(),
                 _ => (),
             })
         });

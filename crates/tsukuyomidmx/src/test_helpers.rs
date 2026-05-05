@@ -3,6 +3,7 @@ use tsukuyomidmx_core::prelude::{
 };
 
 ///
+#[cfg(test)]
 pub fn make_fixture_def_2() -> FixtureDef {
     let mut def = FixtureDef::new("Some Manufacturer", "Some Model");
     def.insert_channel(
