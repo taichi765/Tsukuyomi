@@ -21,18 +21,8 @@ jobs:
       - name: checkout main repo
         uses: actions/checkout@v4
         with:
-          path: TsukuyomiDMX
           submodules: recursive
-      - name: checkout slint repo
-        uses: actions/checkout@v4
-        with:
-          repository: taichi765/slint
-          path: slint
       - uses: Swatinem/rust-cache@v2
-        with:
-          workspaces: |
-            TsukuyomiDMX -> target
-            slint -> target
       - name: Install fontconfig and protobuf-compiler
         if: ${{matrix.os=='ubuntu-latest'}}
         run: |
@@ -45,19 +35,17 @@ jobs:
           brew install protobuf
       - name: Build
         run: cargo build --release --verbose
-        working-directory: ./tsukuyomi-rs-repo
       - name: Run tests
         run: cargo test --verbose
-        working-directory: ./tsukuyomi-rs-repo
       - name: Upload a build artifact(windows)
         if: ${{matrix.os=='windows-2022'}}
         uses: actions/upload-artifact@v5
         with:
           name: ${{matrix.os}}
-          path: ./tsukuyomi-rs-repo/target/release/tsukuyomidmx.exe
+          path: ./target/release/tsukuyomidmx.exe
       - name: Upload a build artifact(ubuntu/macos)
         if: ${{matrix.os!='windows-2022'}}
         uses: actions/upload-artifact@v5
         with:
           name: ${{matrix.os}}
-          path: ./tsukuyomi-rs-repo/target/release/tsukuyomidmx
+          path: ./target/release/tsukuyomidmx
