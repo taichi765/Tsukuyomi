@@ -18,6 +18,9 @@ jobs:
         command: ["build --release --verbose", "test --verbose"]
 
     runs-on: ${{matrix.os}}
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: checkout main repo
@@ -31,7 +34,6 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y libfontconfig1-dev
       - name: Install protoc
-        shell: bash
         run: |
           set -eux
 
