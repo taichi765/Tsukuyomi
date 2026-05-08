@@ -63,6 +63,8 @@ jobs:
 
       - name: Print protoc version
         run: protoc --version
+        env:
+          PATH: "$PWD/protoc/bin:$PATH"
       - name: Run commands
         run: cargo ${{matrix.command}}
         env:
