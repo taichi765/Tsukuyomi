@@ -9,9 +9,6 @@ members = [
 ]
 resolver = "3"
 
-[profile.release]
-debug = true
-panic = "unwind"
 
 [workspace.package]
 version = "0.1.0"
@@ -53,3 +50,7 @@ slint-build = { git = "https://github.com/taichi765/slint", rev = "2f4f1edcf0de5
 [profile.dev.package."*"]
 # Optimize dependencies (e.g. slint)
 opt-level = 2
+
+[profile.release]
+debug = true
+panic = "unwind"

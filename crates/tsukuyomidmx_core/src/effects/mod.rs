@@ -438,9 +438,9 @@ impl Default for FixtureQuery {
     fn default() -> Self {
         Self {
             // TODO: hardcode
-            string: "#american-dj__pocket-pro.some-tag".to_string(),
+            string: "#american-dj__pocket-pro".to_string(),
             model: FixtureDefId::new("american-dj".into(), "pocket-pro".into()),
-            tags: vec![FixtureTag::new("some-tag").unwrap()],
+            tags: vec![],
         }
     }
 }

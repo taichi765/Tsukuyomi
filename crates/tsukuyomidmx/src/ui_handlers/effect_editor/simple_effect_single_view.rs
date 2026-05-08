@@ -21,13 +21,7 @@ pub(super) fn setup(app: &App, effect_model: &EffectEditorModel) {
         cur_id_state: app.global_store.read().unwrap().current_effect_id(),
     };
 
-    adopter.on_update_value({
-        let handler = handler.clone();
-
-        move |offset, value| {
-            handler.update_value(offset, value);
-        }
-    });
+    adopter.attach_handler(handler);
 
     effect_model.subscribe_current_effect_data({
         // TODO: ここでは別に循環参照にならないかも
@@ -65,7 +59,7 @@ impl SimpleEffectSingleViewHandlerTrait for SimpleEffectSingleViewHandler {
         let new_body = doc_view.with_effects(|it| {
             let fx_body = it.get(&cur_id).unwrap().unwrap_simple();
             let SimpleEffectBody::New { fixtures, values } = fx_body else {
-                unreachable!("this effect is always SimpleEffectBody::New");
+                todo!("SimpleEffectBody::FromTemplate is not supported here at the moment");
             };
             let new_values = values
                 .iter()
@@ -87,5 +81,26 @@ impl SimpleEffectSingleViewHandlerTrait for SimpleEffectSingleViewHandler {
             .unwrap()
             .update_effect(cur_id, EffectChange::Simple(new_body))
             .unwrap();
+    }
+}
+
+/// This trait is implemented for [`Global`]s.
+///
+/// [`Global`]:slint::Global
+trait AttachHandler<H> {
+    fn attach_handler(&self, handler: H);
+}
+
+impl<H> AttachHandler<H> for ui::SimpleEffectSingleViewAdopter<'_>
+where
+    H: SimpleEffectSingleViewHandlerTrait + Clone + 'static,
+{
+    fn attach_handler(&self, handler: H) {
+        self.on_update_value({
+            let handler = handler.clone();
+            move |offset, value| {
+                handler.update_value(offset, value);
+            }
+        });
     }
 }

@@ -21,7 +21,7 @@ use crate::{
     },
     fixture::{Fixture, FixtureChange, FixtureId},
     fixture_def::FixtureDefId,
-    prelude::ChannelDef,
+    prelude::{ChannelDef, FixtureMode},
     universe::{DmxAddress, UniverseId},
 };
 use tracing::instrument;
@@ -303,6 +303,32 @@ impl DocStateView {
         F: FnOnce(&HashMap<FixtureId, Fixture>, &dyn FixtureDefRegistry) -> R,
     {
         self.0.with_fixtures_and_defs(f)
+    }
+
+    pub fn with_mode<F, R>(&self, fxt_id: FixtureId, f: F) -> Option<R>
+    where
+        F: FnOnce(&FixtureMode) -> R,
+    {
+        self.with_fixtures_and_defs(|fxts, defs| {
+            let fxt = fxts.get(&fxt_id)?;
+            let def = defs.get(fxt.fixture_def()).ok()?;
+            let mode = def.mode(fxt.fixture_mode())?;
+            Some(f(mode))
+        })
+    }
+
+    pub fn with_channels<F, R>(&self, fxt_id: FixtureId, f: F) -> Option<R>
+    where
+        F: for<'def> FnOnce(Box<dyn Iterator<Item = (&usize, &str, &'def ChannelDef)> + 'def>) -> R,
+        R: 'static,
+    {
+        self.with_fixtures_and_defs(|fxts, defs| {
+            let fxt = fxts.get(&fxt_id)?;
+            let def = defs.get(fxt.fixture_def()).ok()?;
+            let mode = def.mode(fxt.fixture_mode())?;
+            let channels = Box::new(mode.iter_channels(def));
+            Some(f(channels))
+        })
     }
 
     pub fn universes(&self) -> Vec<UniverseId> {

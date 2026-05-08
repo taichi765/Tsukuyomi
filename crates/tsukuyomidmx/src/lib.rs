@@ -40,7 +40,7 @@ pub fn run_main() -> Result<(), Box<dyn Error>> {
         EnvFilter::try_new("tsukuyomidmx=debug,tsukuyomidmx-core=debug,off").unwrap()
     };
     let my_layer = fmt::layer()
-        .with_span_events(FmtSpan::ENTER | FmtSpan::EXIT)
+        //.with_span_events(FmtSpan::ENTER | FmtSpan::EXIT)
         .with_filter(filter);
     let external_layer = fmt::layer().with_filter(EnvFilter::new(
         "tsukuyomidmx=off,tsukuyomidmx-core=off,info",

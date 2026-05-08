@@ -5,6 +5,7 @@ use std::{
 };
 
 use slint::{Model, ModelRc, ModelTracker, SharedString, ToSharedString, VecModel};
+use tracing::debug;
 use tsukuyomidmx_core::{
     doc::{Doc, DocEffect, DocStateView},
     effects::{Effect, EffectBody, FixtureQuery, SimpleEffectBody},
@@ -33,7 +34,6 @@ impl EffectEditorModel {
             Box::new(move |ev| match ev {
                 DocEffect::EffectUpdated(id) => {
                     let new_data = EffectEditorData::from_effect(*id, doc_view.clone());
-
                     me.current_effect_data.set(Some(new_data));
                 }
                 DocEffect::EffectRemoved(id) => {
@@ -127,19 +127,46 @@ impl EffectEditorData {
             let effect = it.get(&effect_id).unwrap();
             match effect.body() {
                 EffectBody::Simple(body) => match body {
-                    SimpleEffectBody::New {
-                        fixtures,
-                        values: _,
-                    } => {
-                        let channels = doc.with_fixtures_and_defs(|_fxts, _defs| {
-                            vec![ui::SimpleEffectSingleViewChannelData {
+                    SimpleEffectBody::New { fixtures, values } => {
+                        let enabled_channels = values.iter().map(|(&offset, &value)| {
+                            ui::SimpleEffectSingleViewChannelData {
                                 enabled: true,
-                                kind: ui::ChannelKind::Dimmer,
+                                kind: ui::ChannelKind::Dimmer, // TODO!: dummy
                                 name: "Dimmer".to_shared_string(),
-                                offset: 0,
-                                value: 255, // TODO!: dummy
-                            }]
+                                offset: offset.try_into().unwrap(),
+                                value: value.try_into().unwrap(),
+                            }
                         });
+                        let disabled_channels = {
+                            // チャンネルの内容はどのFixtureも同じなので最初の要素を取る
+                            let fxt_id = fixtures.query(doc.clone()).get(0).unwrap().to_owned();
+
+                            doc.with_channels(fxt_id, |channels| {
+                                channels
+                                    .filter(|&(&offset, _, _)| {
+                                        enabled_channels
+                                            .clone()
+                                            .all(|ch| ch.offset != offset as i32)
+                                    })
+                                    .map(move |(&offset, name, ch)| {
+                                        ui::SimpleEffectSingleViewChannelData {
+                                            enabled: false,
+                                            kind: ui::ChannelKind::Dimmer, // TODO!: dummy
+                                            name: name.to_shared_string(),
+                                            offset: offset as i32,
+                                            value: 0,
+                                        }
+                                    })
+                                    .collect::<Vec<_>>()
+                            })
+                        }
+                        .unwrap();
+
+                        let channels: Vec<_> = enabled_channels
+                            .chain(disabled_channels.into_iter())
+                            .collect();
+                        // TODO: sortしたほうがいいかも
+
                         EffectEditorData::Simple(SimpleEffectSingleViewAdopterData {
                             fixture_query: fixtures.to_shared_string(),
                             effect_name: effect.name().to_shared_string(),

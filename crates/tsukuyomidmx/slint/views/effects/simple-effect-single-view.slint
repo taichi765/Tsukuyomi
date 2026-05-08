@@ -1,4 +1,4 @@
-import { Slider, LineEdit } from "std-widgets.slint";
+import { Slider, LineEdit, Button } from "std-widgets.slint";
 import { PlaneText, MiddleText } from "../../parts/texts.slint";
 import { Icons } from "../../styling.slint";
 import { ChannelKind } from "../../types.slint";
@@ -64,56 +64,44 @@ component Channel inherits Rectangle {
     in property <int> value;
     in property <string> name:"Dummy";
 
-    callback value-changed(val: int);
+    callback update-value(val: int);
 
     HorizontalLayout {
+        align-items: LayoutAlignItems.center;
 
         Image {
             source: icon;
-            //preferred-height: edit.preferred-height;
+            preferred-height: edit.preferred-height;
             preferred-width: edit.preferred-height * icon.width / icon.height;
-            //image-fit: contain;
             vertical-alignment: center;
-            //horizontal-alignment: left;
             horizontal-stretch: 0;
         }
 
-        Rectangle {
+        PlaneText {
+            text: root.name;
+            min-width: 20px;
+            preferred-height: edit.preferred-height;
             horizontal-stretch: 0;
-
-            PlaneText {
-                text: root.name;
-                min-width: 20px;
-            }
         }
 
-        Rectangle {
-            edit := LineEdit {
-                input-type: number;
-                width: 30px;
-                accepted(text) => {
-                    value-changed(text.to-float())
-                }
-            }
+        slider := Slider {
+            orientation: Orientation.horizontal;
+            minimum: 0;
+            maximum: 255;
+            width: root.slider-width;
+            preferred-height: edit.preferred-height;
+            value: root.value;
+            horizontal-stretch: 2;
+            changed(value) => update-value(value);
         }
 
-        Rectangle {
-            slider := Slider {
-                orientation: Orientation.horizontal;
-                minimum: 0;
-                maximum: 255;
-                width: root.slider-width;
-                value: root.value;
-                horizontal-stretch: 2;
-                changed(value) => value-changed(value);
-            }
-        }
-
-        Rectangle {
-            PlaneText {
-                text: round(slider.value);
-                min-width: 52px;
-                horizontal-stretch: 0;
+        edit := LineEdit {
+            input-type: number;
+            width: 60px;
+            horizontal-stretch: 0;
+            text: root.value;
+            accepted(text) => {
+                update-value(text.to-float())
             }
         }
     }
@@ -136,13 +124,13 @@ export component SimpleEffectSingleView {
         VerticalLayout {
             for ch in Adopter.item.channels: Channel {
                 icon: Icons.dimmer; //TODO: kindに応じて変える
-                slider-width: 30px; //TODO: hard code
+                slider-width: 100px; //TODO: hard code
                 enabled: ch.enabled;
                 kind: ch.kind;
                 value: ch.value;
                 name: ch.name;
 
-                value-changed(val) => {
+                update-value(val) => {
                     Adopter.update-value(ch.offset, val);
                 }
             }

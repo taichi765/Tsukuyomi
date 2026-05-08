@@ -326,6 +326,16 @@ impl FixtureMode {
     pub fn contains_channel(&self, channel: &str) -> bool {
         self.channel_order.contains_left(channel)
     }
+
+    pub fn iter_channels<'def>(
+        &self,
+        def: &'def FixtureDef,
+    ) -> impl Iterator<Item = (&usize, &str, &'def ChannelDef)> {
+        let channels = &def.channel_templates;
+        self.channel_order
+            .iter()
+            .map(|(name, offset)| (offset, name.as_str(), channels.get(name).unwrap()))
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
