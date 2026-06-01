@@ -27,7 +27,7 @@ thiserror = "2.0.17"
 uuid = { version = "1.19.0", features = ["v4"] }
 wgpu = "28.0.0"
 serde = { version = "1.0.228", features = ["derive"] }
-serde_json = "1.0.149"
+serde_json = "1.0.150"
 
 # Slint dependencies
 # Use forked version to use pre-release features
